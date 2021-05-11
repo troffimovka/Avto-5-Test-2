@@ -9,50 +9,49 @@ import static com.codeborne.selenide.Selenide.open;
 
 
 
-public class AuthorizationTest {
+class AuthorizationTest {
+    private static Faker faker = new Faker(new Locale("en"));
 
     @BeforeEach
-    void setUp() {
+    void shouldOpenWeb() {
         open("http://localhost:9999");
+
     }
 
     @Test
-    void shouldTestHappyPath() {
-        ClientData clientData = DataGenerator.Autharization.registrationOfActiveUser();
-        $("[data-test-id='login'] input").setValue(clientData.getLogin());
-        $("[data-test-id='password'] input").setValue(clientData.getPassword());
-        $(withText("Продолжить")).click();
-        $(withText("Личный кабинет")).shouldBe(visible);
+    void shouldAcceptValidActiveUser() {
+        UserInfo userInfo = DataGenerator.getRegisteredUser("active");
+        $("[data-test-id=login] [class = input__control]").setValue(userInfo.getLogin());
+        $("[data-test-id=password] [class = input__control]").setValue(userInfo.getPassword());
+        $(byText("Продолжить")).click();
+        $(withText("Личный кабинет")).shouldBe(Condition.visible, Duration.ofSeconds(15));
     }
+
     @Test
-    void shouldTestIncorrectLoginOfValidUser() {
-        ClientData clientData = DataGenerator.Autharization.registrationOfActiveUser();
-        $("[data-test-id='login'] input").setValue(DataGenerator.Autharization.incorrectLogin());
-        $("[data-test-id='password'] input").setValue(clientData.getPassword());
-        $(withText("Продолжить")).click();
-        $("[data-test-id='error-notification'] .notification__content").shouldBe(visible).shouldHave(text("Неверно указан логин или пароль"));
+    void shouldRejectInvalidLoginActiveUser() {
+        UserInfo userInfo = DataGenerator.getRegisteredUser("active");
+        $("[data-test-id=login] [class = input__control]").setValue(DataGenerator.getNewLogin());
+        $("[data-test-id=password] [class = input__control]").setValue(userInfo.getPassword());
+        $(byText("Продолжить")).click();
+        $(withText("Неверно указан логин или пароль")).shouldBe(Condition.visible, Duration.ofSeconds(15));
     }
+
     @Test
-    void shouldTestIncorrectPasswordOfValidUser() {
-        ClientData clientData = DataGenerator.Autharization.registrationOfActiveUser();
-        $("[data-test-id='login'] input").setValue(clientData.getLogin());
-        $("[data-test-id='password'] input").setValue(DataGenerator.Autharization.incorrectPassword());
-        $(withText("Продолжить")).click();
-        $("[data-test-id='error-notification'] .notification__content").shouldBe(visible).shouldHave(text("Неверно указан логин или пароль"));
+    void shouldRejectInvalidPasswordActiveUser() {
+        UserInfo userInfo = DataGenerator.getRegisteredUser("active");
+        $("[data-test-id=login] [class = input__control]").setValue(userInfo.getLogin());
+        $("[data-test-id=password] [class = input__control]").setValue(DataGenerator.getNewPassword());
+        $(byText("Продолжить")).click();
+        $(withText("Неверно указан логин или пароль")).shouldBe(Condition.visible, Duration.ofSeconds(15));
     }
+
     @Test
-    void shouldTestBlockedUser() {
-        ClientData clientData = DataGenerator.Autharization.registrationOfBlockedUser();
-        $("[data-test-id='login'] input").setValue(clientData.getLogin());
-        $("[data-test-id='password'] input").setValue(clientData.getPassword());
-        $(withText("Продолжить")).click();
-        $("[data-test-id='error-notification'] .notification__content").shouldBe(visible).shouldHave(text("Пользователь заблокирован"));
+    void shouldRejectValidBlockedUser() {
+        UserInfo userInfo = DataGenerator.getRegisteredUser("blocked");
+        $("[data-test-id=login] [class = input__control]").setValue(userInfo.getLogin());
+        $("[data-test-id=password] [class = input__control]").setValue(userInfo.getPassword());
+        $(byText("Продолжить")).click();
+        $(withText("Пользователь заблокирован")).shouldBe(Condition.visible, Duration.ofSeconds(15));
     }
-    @Test
-    void shouldTestUnauthorithedUser() {
-        $("[data-test-id='login'] input").setValue(DataGenerator.Autharization.generateAutharizationForActiveUser().getLogin());
-        $("[data-test-id='password'] input").setValue(DataGenerator.Autharization.generateAutharizationForActiveUser().getPassword());
-        $(withText("Продолжить")).click();
-        $("[data-test-id='error-notification'] .notification__content").shouldBe(visible).shouldHave(text("Неверно указан логин или пароль"));
-    }
+
 }
