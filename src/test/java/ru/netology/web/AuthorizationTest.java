@@ -9,8 +9,6 @@ import static com.codeborne.selenide.Selenide.open;
 
 
 
-class AuthorizationTest {
-    private static Faker faker = new Faker(new Locale("en"));
 
     @BeforeEach
     void shouldOpenWeb() {
