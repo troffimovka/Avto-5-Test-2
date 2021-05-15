@@ -25,7 +25,7 @@ public class DataGenerator {
             .build();
 
 
-    public static void setNewUser(UserInfo registration) {
+    public static void setNewUser(ClientData registration) {
         given()
                 .spec(requestSpecification) // указываем, какую спецификацию используем
                 .body(registration) // передаём в теле объект, который будет преобразован в JSON
@@ -36,10 +36,10 @@ public class DataGenerator {
     }
 
 
-    public static UserInfo getRegisteredUser(String status) {
+    public static ClientData getRegisteredUser(String status) {
         String login = faker.name().fullName();
         String password = faker.internet().password();
-        UserInfo registration = new UserInfo(login, password, status);
+        ClientData registration = new ClientData(login, password, status);
         setNewUser(registration);
         return registration;
     }
