@@ -9,7 +9,6 @@ import static com.codeborne.selenide.Selenide.open;
 
 
 
-
     public class AuthorizationTest {
 
     @BeforeEach
@@ -18,7 +17,7 @@ import static com.codeborne.selenide.Selenide.open;
 
     @Test
     void shouldTestHappyPath() {
-        ClientData clientData = DataGenerator.Autharization.registrationOfActiveUser();
+        ClientData clientData = DataGenerator.getRegisteredUser("active");
         $("[data-test-id='login'] input").setValue(clientData.getLogin());
         $("[data-test-id='password'] input").setValue(clientData.getPassword());
         $(withText("Продолжить")).click();
@@ -26,17 +25,17 @@ import static com.codeborne.selenide.Selenide.open;
     }
     @Test
     void shouldTestIncorrectLoginOfValidUser() {
-        ClientData clientData = DataGenerator.Autharization.registrationOfActiveUser();
-        $("[data-test-id='login'] input").setValue(DataGenerator.Autharization.incorrectLogin());
+        ClientData clientData = DataGenerator.getRegisteredUser();
+        $("[data-test-id='login'] input").setValue(DataGenerator.getRegisteredUser.incorrectLogin());
         $("[data-test-id='password'] input").setValue(clientData.getPassword());
         $(withText("Продолжить")).click();
         $("[data-test-id='error-notification'] .notification__content").shouldBe(visible).shouldHave(text("Неверно указан логин или пароль"));
     }
     @Test
     void shouldTestIncorrectPasswordOfValidUser() {
-        ClientData clientData = DataGenerator.Autharization.registrationOfActiveUser();
+        ClientData clientData = DataGenerator.getRegisteredUser();
         $("[data-test-id='login'] input").setValue(clientData.getLogin());
-        $("[data-test-id='password'] input").setValue(DataGenerator.Autharization.incorrectPassword());
+        $("[data-test-id='password'] input").setValue(DataGenerator.getRegisteredUser.incorrectPassword());
         $(withText("Продолжить")).click();
         $("[data-test-id='error-notification'] .notification__content").shouldBe(visible).shouldHave(text("Неверно указан логин или пароль"));
     }
@@ -50,8 +49,8 @@ import static com.codeborne.selenide.Selenide.open;
     }
     @Test
     void shouldTestUnauthorithedUser() {
-        $("[data-test-id='login'] input").setValue(DataGenerator.Autharization.generateAutharizationForActiveUser().getLogin());
-        $("[data-test-id='password'] input").setValue(DataGenerator.Autharization.generateAutharizationForActiveUser().getPassword());
+        $("[data-test-id='login'] input").setValue(DataGenerator.generateAutharizationForActiveUser().getLogin());
+        $("[data-test-id='password'] input").setValue(DataGenerator.generateAutharizationForActiveUser().getPassword());
         $(withText("Продолжить")).click();
         $("[data-test-id='error-notification'] .notification__content").shouldBe(visible).shouldHave(text("Неверно указан логин или пароль"));
     }
