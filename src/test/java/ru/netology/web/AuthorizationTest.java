@@ -49,8 +49,8 @@ import static com.codeborne.selenide.Selenide.open;
     }
     @Test
     void shouldTestUnauthorithedUser() {
-        $("[data-test-id='login'] input").setValue(DataGenerator.generateAutharizationForActiveUser().getLogin());
-        $("[data-test-id='password'] input").setValue(DataGenerator.generateAutharizationForActiveUser().getPassword());
+        $("[data-test-id='login'] input").setValue(DataGenerator.getNewLogin());
+        $("[data-test-id='password'] input").setValue(DataGenerator.getNewPassword());
         $(withText("Продолжить")).click();
         $("[data-test-id='error-notification'] .notification__content").shouldBe(visible).shouldHave(text("Неверно указан логин или пароль"));
     }
