@@ -41,7 +41,7 @@ import static com.codeborne.selenide.Selenide.open;
     }
     @Test
     void shouldTestBlockedUser() {
-        ClientData clientData = DataGenerator.registrationOfBlockedUser();
+        ClientData clientData = DataGenerator.registrationOfBlockedUser("blocked");
         $("[data-test-id='login'] input").setValue(clientData.getLogin());
         $("[data-test-id='password'] input").setValue(clientData.getPassword());
         $(withText("Продолжить")).click();
