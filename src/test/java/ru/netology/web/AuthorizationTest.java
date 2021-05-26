@@ -26,7 +26,7 @@ import static com.codeborne.selenide.Selenide.open;
     @Test
     void shouldTestIncorrectLoginOfValidUser() {
         ClientData clientData = DataGenerator.getRegisteredUser();
-        $("[data-test-id='login'] input").setValue(DataGenerator.getRegisteredUser.incorrectLogin());
+        $("[data-test-id='login'] input").setValue(clientData.incorrectLogin());
         $("[data-test-id='password'] input").setValue(clientData.getPassword());
         $(withText("Продолжить")).click();
         $("[data-test-id='error-notification'] .notification__content").shouldBe(visible).shouldHave(text("Неверно указан логин или пароль"));
@@ -35,13 +35,13 @@ import static com.codeborne.selenide.Selenide.open;
     void shouldTestIncorrectPasswordOfValidUser() {
         ClientData clientData = DataGenerator.getRegisteredUser();
         $("[data-test-id='login'] input").setValue(clientData.getLogin());
-        $("[data-test-id='password'] input").setValue(DataGenerator.getRegisteredUser.incorrectPassword());
+        $("[data-test-id='password'] input").setValue(clientData.incorrectPassword());
         $(withText("Продолжить")).click();
         $("[data-test-id='error-notification'] .notification__content").shouldBe(visible).shouldHave(text("Неверно указан логин или пароль"));
     }
     @Test
     void shouldTestBlockedUser() {
-        ClientData clientData = DataGenerator.Autharization.registrationOfBlockedUser();
+        ClientData clientData = DataGenerator.registrationOfBlockedUser();
         $("[data-test-id='login'] input").setValue(clientData.getLogin());
         $("[data-test-id='password'] input").setValue(clientData.getPassword());
         $(withText("Продолжить")).click();
